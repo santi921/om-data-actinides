@@ -59,6 +59,7 @@ def select_metals(metal_df: pd.DataFrame, lanthanides="include") -> pd.DataFrame
             newrow["total_count"] = np.sum(newrow["coreCN_counts_CSD"])
             newrows.append(newrow)
     subset_cn_metal_df = pd.DataFrame(newrows)
+
     # Add Pm with Sm numbers (neighbors of Sm and Nd) - both Sm and Nd have similar values anyway.
     if lanthanides != 'exclude':
         refrow = subset_cn_metal_df[subset_cn_metal_df.metal == "Sm"].iloc[0]
@@ -348,8 +349,8 @@ def main():
     args = parse_args()
 
     #metal_df = pd.read_pickle("metal_sample_dataframe.pkl") # Main oxidation state TM/Ln for release
-    metal_df = pd.read_pickle("new_metal_sample_dataframe.pkl") # New oxidation states post-release
-    ligands_df = pd.read_pickle("ligand_sample_dataframe.pkl")
+    metal_df = pd.read_pickle("./data/new_metal_sample_dataframe.pkl") # New oxidation states post-release
+    ligands_df = pd.read_pickle("./data/ligand_sample_dataframe.pkl")
     if args.history is not None:
         with open(args.history, "r") as fh:
             history = set(eval(fh.read()))
@@ -357,7 +358,7 @@ def main():
         history = None
 
     #gen_metal_df = select_metals(metal_df) # Comment out for heavy main-group
-    gen_metal_df = pd.read_pickle('main_group_as_metals.pkl') # Heavy-main group as metal centers
+    gen_metal_df = pd.read_pickle('./data/main_group_as_metals.pkl') # Heavy-main group as metal centers
     ligands_df = select_ligands(ligands_df, heavy_maingroup=args.include_heavy_mg, add_hydride=args.include_hydride)
     sdf, history = create_sample(
         metal_df=gen_metal_df,
