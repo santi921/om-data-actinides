@@ -9,7 +9,6 @@ from ase.io import write
 import copy
 random.seed(42)
 
-
 open_shell_metals = ["Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au"]
 
 def num_open_shell_metals(atoms):
