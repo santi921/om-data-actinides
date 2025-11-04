@@ -76,7 +76,7 @@ def split_results_by_vertical():
     return vertical_dict
 
 
-def determine_valid_pes_curves(vertical_dict)
+def determine_valid_pes_curves(vertical_dict):
     if not os.path.exists('good_groups'):
         good_groups = defaultdict(list)
         for vert_name, vert in list(vertical_dict.items()):
@@ -120,7 +120,7 @@ def determine_valid_pes_curves(vertical_dict)
             good_groups = json.loads(fh.read())
     return good_groups
 
-def main()
+def main():
     vertical_dict = split_results_by_vertical()
     good_groups = determine_valid_pes_curves(vertical_dict)
     for vert, groups in good_groups.items():

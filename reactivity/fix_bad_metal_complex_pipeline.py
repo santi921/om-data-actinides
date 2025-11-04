@@ -23,7 +23,7 @@ from monty.serialization import loadfn
 
 import openbabel as ob
 
-from omdata.reactivity_utils import min_non_hh_distance, check_bonds, check_isolated_o2, filter_unique_structures, AFIRPushConstraint, run_afir, find_min_distance
+from omdata.reactivity_utils import filter_unique_structures, run_afir
 
 def metal_complex_pipeline(name, sdf, charge, uhf, output_path):
     os.makedirs(os.path.join(output_path, name), exist_ok=False)

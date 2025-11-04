@@ -1,0 +1,25 @@
+! wB97M-V RIJCOSX def2/J NoUseSym DIIS NOSOSCF NormalConv DEFGRID3 OPT ALLPOP engrad NoTRAH
+%scf
+  MaxIter 300
+  Convergence Tight
+  THRESH 1e-12
+  TCUT 1e-13
+end
+%pal
+  nprocs 8
+end
+%elprop Dipole true Quadrupole true end
+%output Print[P_ReducedOrbPopMO_L] 1 Print[P_ReducedOrbPopMO_M] 1 Print[P_BondOrder_L] 1 Print[P_BondOrder_M] 1 Print[P_Fockian] 1 Print[P_OrbEn] 2 end
+
+%basis
+  NewGTO F "def2-TZVPD" end
+  NewGTO Am "ma-def-TZVP" end
+  NewECP Am "def-ECP" end
+end
+
+* xyz 0 7
+Am	0.000000	0.000000	0.000000
+F	0.000000	0.000000	2.061070
+F	0.000000	1.960687	-0.630113
+F	-1.636177	-0.973355	-0.792575
+*

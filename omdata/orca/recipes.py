@@ -71,7 +71,7 @@ def single_point_calculation(
         orcasimpleinput = ORCA_SIMPLE_INPUT.copy()
     if orcablocks is None:
         orcablocks = ORCA_BLOCKS.copy()
-    if vertical == Vertical.MetalOrganics and spin_multiplicity == 1:
+    if vertical == Vertical.MetalOrganics and spin_multiplicity == 1: # todo: SV update here
         orcasimpleinput.append("UKS")
         orcablocks.append(get_symm_break_block(atoms, charge))
     if not nbo:
@@ -160,8 +160,8 @@ def ase_relaxation(
         orcablocks = ORCA_BLOCKS.copy()
     if opt_params is None:
         opt_params = OPT_PARAMETERS.copy()
-    if vertical == Vertical.MetalOrganics and spin_multiplicity == 1:
-        orcasimpleinput.append("UKS")
+    if vertical == Vertical.MetalOrganics and spin_multiplicity == 1: # todo: SV update here
+        orcasimpleinput.append("UKS") 
         orcablocks.append(get_symm_break_block(atoms, charge))
     if not nbo:
         orcasimpleinput.extend(["NONBO", "NONPA"])

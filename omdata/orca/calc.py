@@ -14,6 +14,14 @@ ECP_SIZE = {
     **{i: 28 for i in range(58, 72)},
     **{i: 60 for i in range(72, 87)},
 }
+
+# SV - change from def2 to def 
+ECP_SIZE = {
+    **{i: 60 for i in range(87, 88)},
+    **{i: 78 for i in range(89, 103)},
+}
+
+# number of basis sets
 BASIS_DICT = {
     "H": 9,
     "He": 9,
@@ -101,8 +109,42 @@ BASIS_DICT = {
     "Po": 59,
     "At": 59,
     "Rn": 59,
+    "Ac": 105, 
+    "Th": 105, 
+    "Pa": 105, 
+    "U": 105, 
+    "Np": 105, 
+    "Pu": 105, 
+    "Am": 105, 
+    "Cm": 105, 
+    "Bk": 105, 
+    "Cf": 105, 
+    "Es": 105, 
+    "Fm": 105, 
+    "Md": 105,  
+    "No": 105, 
+    "Lr": 105
+    
 }
 
+
+ACTINIDE_LIST = [
+    "Ac",
+    "Th",
+    "Pa",
+    "U",
+    "Np",
+    "Pu",
+    "Am",
+    "Cm",
+    "Bk",
+    "Cf",
+    "Es",
+    "Fm",
+    "Md",
+    "No",
+    "Lr"
+]
 
 ORCA_FUNCTIONAL = "wB97M-V"
 ORCA_BASIS = "def2-TZVPD"
@@ -116,16 +158,18 @@ ORCA_SIMPLE_INPUT = [
     "NormalConv",
     "DEFGRID3",
     "ALLPOP",
+    "NoTRAH" # SV - add for TM complexes
 ]
 ORCA_BLOCKS = [
-    "%scf Convergence Tight maxiter 300 end",
+    "%scf Convergence Tight maxiter 500 end", # up for TM complexes, discuss changes
     "%elprop Dipole true Quadrupole true end",
     "%output Print[P_ReducedOrbPopMO_L] 1 Print[P_ReducedOrbPopMO_M] 1 Print[P_BondOrder_L] 1 Print[P_BondOrder_M] 1 Print[P_Fockian] 1 Print[P_OrbEn] 2 end",
-    '%basis GTOName "def2-tzvpd.bas" end',
     "%scf THRESH 1e-12 TCUT 1e-13 end",
+    '%basis GTOName "def2-tzvpd.bas"', # TODO: edit for ECPs / new basis   
 ]
 
-NBO_FLAGS = '%nbo NBOKEYLIST = "$NBO NPA NBO E2PERT 0.1 $END" end'
+NBO_FLAGS = '%nbo NBOKEYLIST = "$NBO NPA NBO E2PERT 0.1 $END" end' # SV - turn off??
+
 ORCA_ASE_SIMPLE_INPUT = " ".join([ORCA_FUNCTIONAL] + [ORCA_BASIS] + ORCA_SIMPLE_INPUT)
 LOOSE_OPT_PARAMETERS = {
     "optimizer": Sella,
@@ -263,12 +307,19 @@ def write_orca_inputs(
     One-off method to be used if you wanted to write inputs for an arbitrary
     system. Primarily used for debugging.
     """
+    for elem in atoms.get_chemical_symbols():
+        if elem in ACTINIDE_LIST:
+            # add newGTO and NewECP lines for actinides
+            orcablocks += f'  NewGTO {elem} "ma-def-TZVP" end\n'
+            orcablocks += f'  NewECP {elem} "def-ECP" end\n'
+            orcablocks += " %end\n"
 
     MyOrcaProfile = OrcaProfile([which("orca")])
 
     # Include estimate of memory needs
     mem_est = get_mem_estimate(atoms, vertical, mult)
     orcablocks += f" %maxcore {mem_est}"
+    
     if not nbo:
         orcasimpleinput += " NONBO NONPA"
     else:
